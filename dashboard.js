@@ -2,9 +2,12 @@
 document.addEventListener('DOMContentLoaded', async () => {
     console.log('Dashboard loaded');
     await loadDashboard();
+    
+    // Add event listeners for buttons
+    setupEventListeners();
 });
 
-let currentTimeRange = 30; // Default to 30 days
+let currentTimeRange = 'period'; // Default to current billing period
 
 async function loadDashboard() {
     const loadingDiv = document.getElementById('loading');
@@ -38,7 +41,9 @@ function displayDashboard(data, lastUpdated) {
     document.getElementById('dashboard-content').innerHTML = `
         <div class="grid-layout">
             <div class="card">
-                <h3>📊 Quick Overview</h3>
+                <h3><svg class="card-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                </svg> Quick Overview</h3>
                 <div class="stat-row">
                     <span class="stat-label">Last Updated</span>
                     <span class="stat-value">${formatDate(lastUpdated)}</span>
@@ -47,20 +52,27 @@ function displayDashboard(data, lastUpdated) {
                     <span class="stat-label">Data Source</span>
                     <span class="stat-value">Cursor Dashboard</span>
                 </div>
-                <button class="btn" onclick="extractFromCursor()">🔄 Refresh Data</button>
+                <button class="btn" id="refresh-data-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 4px; vertical-align: middle;">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                </svg>Refresh Data</button>
             </div>
 
             <div class="card">
-                <h3>⏰ Time Range Selector</h3>
+                <h3><svg class="card-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg> Time Range Selector</h3>
                 <div class="time-range-buttons">
-                    <button class="time-btn ${currentTimeRange === 30 ? 'active' : ''}" onclick="changeTimeRange(30)">30 Days</button>
-                    <button class="time-btn ${currentTimeRange === 60 ? 'active' : ''}" onclick="changeTimeRange(60)">60 Days</button>
-                    <button class="time-btn ${currentTimeRange === 90 ? 'active' : ''}" onclick="changeTimeRange(90)">90 Days</button>
-                    <button class="time-btn ${currentTimeRange === 'all' ? 'active' : ''}" onclick="changeTimeRange('all')">All Time</button>
+                    <button class="time-btn ${currentTimeRange === 'period' ? 'active' : ''}" data-range="period">Current Period</button>
+                    <button class="time-btn ${currentTimeRange === 30 || currentTimeRange === '30' ? 'active' : ''}" data-range="30">30 Days</button>
+                    <button class="time-btn ${currentTimeRange === 60 || currentTimeRange === '60' ? 'active' : ''}" data-range="60">60 Days</button>
+                    <button class="time-btn ${currentTimeRange === 90 || currentTimeRange === '90' ? 'active' : ''}" data-range="90">90 Days</button>
+                </div>
+                <div class="time-range-display">
+                    <span class="time-range-text">${getTimeRangeDisplay(currentTimeRange, billingData)}</span>
                 </div>
                 <div class="stat-row">
                     <span class="stat-label">Showing Data For</span>
-                    <span class="stat-value">${currentTimeRange === 'all' ? 'All Time' : `Last ${currentTimeRange} Days`}</span>
+                    <span class="stat-value">${getTimeRangeLabel(currentTimeRange)}</span>
                 </div>
                 <div class="stat-row">
                     <span class="stat-label">Events in Range</span>
@@ -70,7 +82,9 @@ function displayDashboard(data, lastUpdated) {
         </div>
 
         <div class="card">
-            <h3>📅 Billing Period</h3>
+            <h3><svg class="card-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            </svg> Billing Period</h3>
             <div class="stat-row">
                 <span class="stat-label">Current Period</span>
                 <span class="stat-value">${billingData.periodStartFormatted} - ${billingData.periodEndFormatted}</span>
@@ -105,7 +119,7 @@ function displayDashboard(data, lastUpdated) {
                 </div>
                 <div class="metric-highlight">
                     <div class="value">$${processedData.totalCost.toFixed(2)}</div>
-                    <div class="label">Used (${currentTimeRange === 'all' ? 'All Time' : currentTimeRange + 'd'})</div>
+                    <div class="label">Used (${currentTimeRange === 'period' ? 'Current Period' : currentTimeRange + 'd'})</div>
                 </div>
             </div>
             
@@ -132,7 +146,9 @@ function displayDashboard(data, lastUpdated) {
         <div class="grid-layout">
             ${processedData.costs.length > 0 ? `
             <div class="card">
-                <h3>💰 Cost Analysis</h3>
+                <h3><svg class="card-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg> Cost Analysis</h3>
                 <div class="two-column">
                     <div class="metric-highlight">
                         <div class="value">$${subscriptionData.pricePerToken.toFixed(6)}</div>
@@ -170,7 +186,9 @@ function displayDashboard(data, lastUpdated) {
 
             ${processedData.tokens.length > 0 ? `
             <div class="card">
-                <h3>🔢 Token Metrics</h3>
+                <h3><svg class="card-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                </svg> Token Metrics</h3>
                 <div class="two-column">
                     <div class="metric-highlight">
                         <div class="value">${(processedData.totalTokens / 1000000).toFixed(2)}M</div>
@@ -204,7 +222,9 @@ function displayDashboard(data, lastUpdated) {
 
         ${processedData.usageEvents.length > 0 ? `
         <div class="card">
-            <h3>📈 Activity Summary (${currentTimeRange === 'all' ? 'All Time' : 'Last ' + currentTimeRange + ' Days'})</h3>
+            <h3><svg class="card-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+            </svg> Activity Summary (${currentTimeRange === 'period' ? 'Current Period' : 'Last ' + currentTimeRange + ' Days'})</h3>
             <div class="grid-layout">
                 <div>
                     <div class="stat-row">
@@ -242,14 +262,75 @@ function displayDashboard(data, lastUpdated) {
         ` : ''}
 
         <div class="success">
-            ✅ Dashboard loaded with ${processedData.costs.length} cost entries and ${processedData.tokens.length} token entries from the last ${currentTimeRange === 'all' ? 'all time' : currentTimeRange + ' days'}!
+            ✓ Dashboard loaded with ${processedData.costs.length} cost entries and ${processedData.tokens.length} token entries from the last ${currentTimeRange === 'period' ? 'billing period' : currentTimeRange + ' days'}!
         </div>
     `;
+    
+    // Re-setup event listeners for dynamically created buttons
+    setupEventListeners();
 }
 
 function changeTimeRange(days) {
+    console.log('Changing time range to:', days);
     currentTimeRange = days;
-    loadDashboard(); // Reload with new time range
+    // Get the stored data and refresh display without reloading from storage
+    chrome.storage.local.get(['cursorData', 'lastUpdated']).then(result => {
+        if (result.cursorData && result.cursorData.extracted) {
+            console.log('Refreshing dashboard with new time range:', currentTimeRange);
+            displayDashboard(result.cursorData, result.lastUpdated);
+        }
+    });
+}
+
+function getTimeRangeLabel(range) {
+    switch(range) {
+        case 'period': return 'Current Billing Period';
+        default: return `Last ${range} Days`;
+    }
+}
+
+function getTimeRangeDisplay(range, billingData) {
+    switch(range) {
+        case 'period': 
+            return `${billingData.periodStartFormatted} - ${billingData.periodEndFormatted}`;
+        default: 
+            const endDate = new Date();
+            const startDate = new Date();
+            startDate.setDate(endDate.getDate() - range);
+            return `${startDate.toLocaleDateString()} - ${endDate.toLocaleDateString()}`;
+    }
+}
+
+function setupEventListeners() {
+    // Refresh data button
+    const refreshBtn = document.getElementById('refresh-data-btn');
+    if (refreshBtn) {
+        refreshBtn.addEventListener('click', extractFromCursor);
+    }
+    
+    // Extract data button (from error state)
+    const extractBtn = document.getElementById('extract-data-btn');
+    if (extractBtn) {
+        extractBtn.addEventListener('click', extractFromCursor);
+    }
+    
+    // Close dashboard button
+    const closeBtn = document.getElementById('close-dashboard-btn');
+    if (closeBtn) {
+        closeBtn.addEventListener('click', () => window.close());
+    }
+    
+    // Time range buttons - use event delegation since they're dynamically created
+    document.addEventListener('click', (e) => {
+        if (e.target.classList.contains('time-btn')) {
+            const range = e.target.getAttribute('data-range');
+            if (range) {
+                // Convert string numbers to actual numbers
+                const rangeValue = range === 'period' ? 'period' : parseInt(range);
+                changeTimeRange(rangeValue);
+            }
+        }
+    });
 }
 
 async function extractFromCursor() {
@@ -299,7 +380,19 @@ function processRawData(data, timeRangeDays) {
 
     // Calculate cutoff date for time range filtering
     const now = new Date();
-    const cutoffDate = timeRangeDays === 'all' ? new Date(0) : new Date(now.getTime() - (timeRangeDays * 24 * 60 * 60 * 1000));
+    let cutoffDate;
+    
+    if (timeRangeDays === 'period') {
+        // Calculate billing period start date (15th of current or previous month)
+        const currentDay = now.getDate();
+        if (currentDay >= 15) {
+            cutoffDate = new Date(now.getFullYear(), now.getMonth(), 15);
+        } else {
+            cutoffDate = new Date(now.getFullYear(), now.getMonth() - 1, 15);
+        }
+    } else {
+        cutoffDate = new Date(now.getTime() - (timeRangeDays * 24 * 60 * 60 * 1000));
+    }
 
     // Process dollar amounts
     if (data.dollarAmounts) {
@@ -443,9 +536,9 @@ function calculateBillingPeriod(processedData) {
     const daysRemaining = Math.max(0, totalDays - daysElapsed);
     const progressPercentage = Math.round((daysElapsed / totalDays) * 100);
     
-    const avgCostPerDay = processedData.totalCost / Math.max(1, currentTimeRange === 'all' ? 30 : currentTimeRange);
-    const avgTokensPerDay = processedData.totalTokens / Math.max(1, currentTimeRange === 'all' ? 30 : currentTimeRange);
-    const avgEventsPerDay = processedData.usageEvents.length / Math.max(1, currentTimeRange === 'all' ? 30 : currentTimeRange);
+    const avgCostPerDay = processedData.totalCost / Math.max(1, currentTimeRange === 'period' ? 30 : currentTimeRange);
+    const avgTokensPerDay = processedData.totalTokens / Math.max(1, currentTimeRange === 'period' ? 30 : currentTimeRange);
+    const avgEventsPerDay = processedData.usageEvents.length / Math.max(1, currentTimeRange === 'period' ? 30 : currentTimeRange);
     
     const projectedMonthlyCost = avgCostPerDay * 30;
     const projectedMonthlyTokens = avgTokensPerDay * 30;

@@ -12,9 +12,9 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            font-family: 'SF Pro Display', 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #171717;
+            color: #171717;
             min-height: 100vh;
             overflow-x: hidden;
         }
@@ -22,8 +22,9 @@
         .header {
             padding: 30px 20px;
             text-align: center;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(241, 243, 234, 0.9);
             backdrop-filter: blur(10px);
+            color: #171717;
         }
 
         .header h1 {
@@ -39,18 +40,18 @@
         }
 
         .card {
-            background: rgba(255, 255, 255, 0.95);
-            color: #333;
-            border-radius: 16px;
+            background: #FFFFFF;
+            color: #171717;
+            border-radius: 8px;
             padding: 24px;
             margin-bottom: 20px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 32px rgba(23, 23, 23, 0.15);
         }
 
         .card h3 {
             margin: 0 0 20px 0;
             font-size: 20px;
-            color: #4a5568;
+            color: #171717;
             display: flex;
             align-items: center;
             gap: 10px;
@@ -61,7 +62,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 12px 0;
-            border-bottom: 1px solid #e2e8f0;
+            border-bottom: 1px solid #C5C9BB;
         }
 
         .stat-row:last-child {
@@ -70,12 +71,13 @@
 
         .stat-label {
             font-size: 16px;
-            color: #666;
+            color: #171717;
+            opacity: 0.7;
         }
 
         .stat-value {
             font-weight: 600;
-            color: #2d3748;
+            color: #171717;
             font-size: 16px;
         }
 
@@ -87,9 +89,8 @@
         }
 
         .metric-highlight {
-            background: #f0f9ff;
-            border: 2px solid #bae6fd;
-            border-radius: 12px;
+            background: #F1F3EA;
+            border-radius: 6px;
             padding: 16px;
             text-align: center;
         }
@@ -97,19 +98,20 @@
         .metric-highlight .value {
             font-size: 24px;
             font-weight: 700;
-            color: #0369a1;
+            color: #171717;
             margin-bottom: 4px;
         }
 
         .metric-highlight .label {
             font-size: 14px;
-            color: #64748b;
+            color: #171717;
+            opacity: 0.7;
         }
 
         .progress-bar {
             width: 100%;
             height: 12px;
-            background: #e2e8f0;
+            background: #C5C9BB;
             border-radius: 6px;
             overflow: hidden;
             margin: 12px 0;
@@ -117,32 +119,34 @@
 
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, #48bb78, #38a169);
+            background: linear-gradient(90deg, #171717, #C5C9BB);
             transition: width 0.3s ease;
         }
 
         .billing-progress {
-            background: linear-gradient(90deg, #4299e1, #3182ce);
+            background: linear-gradient(90deg, #171717, #C5C9BB);
         }
 
         .btn {
             padding: 12px 24px;
-            background: #4299e1;
-            color: white;
+            background: #171717;
+            color: #FFFFFF;
             border: none;
             border-radius: 8px;
             font-size: 16px;
             cursor: pointer;
             margin: 10px;
+            transition: all 0.2s ease;
         }
 
         .btn:hover {
-            background: #3182ce;
+            background: #C5C9BB;
+            color: #171717;
         }
 
         .warning {
-            background: #fed7d7;
-            color: #c53030;
+            background: #F1F3EA;
+            color: #171717;
             padding: 16px;
             border-radius: 8px;
             margin: 16px 0;
@@ -150,8 +154,8 @@
         }
 
         .success {
-            background: #c6f6d5;
-            color: #2f855a;
+            background: #F1F3EA;
+            color: #171717;
             padding: 16px;
             border-radius: 8px;
             margin: 16px 0;
@@ -172,7 +176,7 @@
 
         .activity-item {
             padding: 10px 0;
-            border-bottom: 1px solid #e2e8f0;
+            border-bottom: 1px solid #C5C9BB;
         }
 
         .activity-item:last-child {
@@ -185,8 +189,8 @@
         }
 
         .spinner {
-            border: 4px solid rgba(255, 255, 255, 0.3);
-            border-top: 4px solid white;
+            border: 4px solid #C5C9BB;
+            border-top: 4px solid #171717;
             border-radius: 50%;
             width: 40px;
             height: 40px;
@@ -203,10 +207,10 @@
 
         .time-btn {
             padding: 8px 16px;
-            background: #f7fafc;
-            border: 2px solid #e2e8f0;
+            background: #F1F3EA;
+            border: 2px solid #C5C9BB;
             border-radius: 6px;
-            color: #4a5568;
+            color: #171717;
             font-size: 14px;
             font-weight: 500;
             cursor: pointer;
@@ -214,25 +218,54 @@
         }
 
         .time-btn:hover {
-            background: #edf2f7;
-            border-color: #cbd5e0;
+            background: #C5C9BB;
+            border-color: #171717;
         }
 
         .time-btn.active {
-            background: #4299e1;
-            border-color: #4299e1;
-            color: white;
+            background: #171717;
+            border-color: #171717;
+            color: #FFFFFF;
         }
 
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+
+        .header-icon {
+            color: #171717;
+            margin-right: 6px;
+            vertical-align: middle;
+        }
+
+        .card-icon {
+            color: #171717;
+            margin-right: 4px;
+            vertical-align: middle;
+        }
+
+        .time-range-display {
+            margin: 8px 0 12px 0;
+            padding: 8px 12px;
+            background: #F1F3EA;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .time-range-text {
+            font-size: 12px;
+            color: #171717;
+            opacity: 0.8;
+            font-weight: 500;
+        }
     </style>
 </head>
 <body>
     <div class="header">
-        <h1>🚀 Cursor Usage Dashboard</h1>
+        <h1><svg class="header-icon" width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+        </svg> Cursor Usage Dashboard</h1>
         <p>Complete analytics for your AI coding assistant</p>
     </div>
 
@@ -248,10 +281,12 @@
 
         <div id="error-content" style="display: none;">
             <div class="card">
-                <h3>❌ No Data Available</h3>
+                <h3><svg class="card-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg> No Data Available</h3>
                 <p>Please visit the Cursor usage page and extract data first.</p>
-                <button class="btn" onclick="extractFromCursor()">Extract Data from Cursor</button>
-                <button class="btn" onclick="window.close()">Close Dashboard</button>
+                <button class="btn" id="extract-data-btn">Extract Data from Cursor</button>
+                <button class="btn" id="close-dashboard-btn">Close Dashboard</button>
             </div>
         </div>
     </div>
