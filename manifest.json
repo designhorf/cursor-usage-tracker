@@ -1,0 +1,28 @@
+{
+  "manifest_version": 3,
+  "name": "Cursor Usage Tracker",
+  "version": "1.0.0",
+  "description": "Track your Cursor AI usage and visualize your data",
+  "permissions": [
+    "activeTab",
+    "storage",
+    "scripting"
+  ],
+  "host_permissions": [
+    "https://cursor.com/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Cursor Usage Tracker"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://cursor.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "background": {
+    "service_worker": "background.js"
+  }
+}
