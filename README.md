@@ -60,6 +60,8 @@ A Chrome extension that extracts and visualizes your Cursor AI usage data with d
 - Assumes 15th of month billing cycle (adjustable)
 
 
+<img width="1015" height="1213" alt="Screenshot 2025-09-20 at 18 13 41" src="https://github.com/user-attachments/assets/558d8ea8-d340-4896-8033-1db716e3d405" />
+
 ### Contributing
 Issues and PRs welcome! This tool helps developers track their AI coding costs effectively.
 
