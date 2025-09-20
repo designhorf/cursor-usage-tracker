@@ -12,13 +12,14 @@ A Chrome extension that extracts and visualizes your Cursor AI usage data with d
 - Resizable dashboard - Full analytics in an independent window
 - Privacy-first - All data stays local in your browser
 
+
 # Quick Start
 
 ### Install
 
-Download and extract the files
-Go to chrome://extensions/ → Enable "Developer mode" → "Load unpacked"
-Select the extension folder
+1. Download and extract the files
+2. Go to chrome://extensions/ → Enable `Developer mode` → `Load unpacked`
+3. Select the extension folder
 
 
 ### Use
@@ -28,13 +29,13 @@ Select the extension folder
 - Resize the window as needed
 
 
-
 ### What You'll See
 
-- Subscription: Pro Plan ($20) with $15.80 remaining
-- Usage: 13.5M tokens, $4.20 spent (21% of budget)
-- Efficiency: $0.000311 per token, 3.2M tokens per dollar
+- Subscription: eg. Pro Plan `$20` with `$15.80` remaining
+- Usage: `13.5M` tokens, `$4.20` spent (21% of budget)
+- Efficiency: `$0.000311` per token, `3.2M` tokens per dollar
 - Projections: Monthly cost estimates and trend analysis
+
 
 ### Files
 - `manifest.json`     - Extension config
@@ -51,13 +52,16 @@ Select the extension folder
 - Reload extension in chrome://extensions/
 - Test on Cursor dashboard
 
+
 ### Notes
 
 - Requires access to cursor.com usage page
 - Manual refresh needed for latest data
 - Assumes 15th of month billing cycle (adjustable)
 
+
 ### Contributing
 Issues and PRs welcome! This tool helps developers track their AI coding costs effectively.
+
 
 ⭐ Star this repo if it helped you track your Cursor usage!
